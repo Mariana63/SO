@@ -15,8 +15,8 @@ int agregar(char *prefixo[], unsigned nivel, char *path){
 
 int main(int argc, char* argv[]){
 	FILE *f;
-	char* p[5];
-	int discriminacao;
+	char* p[4]={NULL,NULL,NULL,NULL};
+	int discriminacao=-1;
 
 	if(argc>1){
 		
@@ -27,21 +27,21 @@ int main(int argc, char* argv[]){
 			scanf("%d", &discriminacao);
 
 				if(discriminacao==0 || discriminacao==1 || discriminacao==2){
-					char* distrito=NULL;
+					char distrito[30];
 					printf("Introduza o Distrito:\n");
 					scanf("%s", distrito);
 					p[0]=distrito;
 
 					if(discriminacao==1 || discriminacao==2){
 						printf("Introduza o Concelho:\n");
-						char* concelho;
+						char concelho[30];
 						scanf("%s", concelho);
 						p[1]=concelho;
 
 
 						if(discriminacao==2){
 							printf("Introduza a Freguesia:\n");
-							char* freguesia;
+							char freguesia[30];
 							scanf("%s", freguesia);
 							p[2]=freguesia;
 						}
@@ -57,10 +57,8 @@ int main(int argc, char* argv[]){
 
 
 //agregar(p, discriminacao, argv[1]);
-printf("%d", discriminacao);
-printf("%s", p[0]);
-printf("%s", p[1]);
-printf("%s", p[2]);
+
+
 return 0;
 
 }
