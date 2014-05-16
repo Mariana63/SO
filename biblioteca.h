@@ -1,3 +1,18 @@
-int agregar(char *prefixo[], unsigned nivel, char *path);
+#ifndef _ART_
+#define _ART_
 
-int incrementar(char *nome[], unsigned valor);
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include "readFile.h"
+#include "struct.h"
+
+
+
+int agregar(char *[], unsigned, char *);
+
+int incrementar(char *[], unsigned);
+
+
+#endif

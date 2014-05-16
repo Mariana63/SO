@@ -1,11 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include "struct.h"
-
-
-#define N 1000
+#include "readFile.h"
 
 
 //inicializar estrutura
@@ -16,20 +9,19 @@ void printEstruturas(){
 
     while(loc!= NULL){
         while(loc->prefixo!=NULL){
-            if(loc->prefixo->next == NULL) printf("Nr. de Casos: %d\n", loc->prefixo->c.nrCasos);
-             else printf("Região- %s\n", loc->prefixo->c.regiao);    
+            if(loc->prefixo->next == NULL) printf("Nº de casos: %d\n", loc->prefixo->c.nrCasos);
+             else printf("Região: %s\n", loc->prefixo->c.regiao);    
                 
             loc->prefixo=(loc->prefixo)->next;
         }
-        printf("NOVA LINHA\n\n");
+        printf("NOVA LINHA\n");
         loc=loc->next;
     }
 }
 
 
 
-void populaEstruturas(char* distrito, char* concelho, char* freguesia, int nrComponentes, int nrCasos){    
-    
+void populaEstruturas(char* distrito, char* concelho, char* freguesia, int nrComponentes, int nrCasos){
     Localidade *la = (Localidade*) malloc(sizeof(Localidade));
     la->c.regiao=strdup(distrito);
   
@@ -68,8 +60,7 @@ void populaEstruturas(char* distrito, char* concelho, char* freguesia, int nrCom
 
 
 
-
-void trataLinha(char linha[]){
+void trataLinha(char* linha){
     char *distrito, *concelho, *freguesia;
     int nrCasos=0;
     char palavra[N]; 
@@ -98,21 +89,14 @@ void trataLinha(char linha[]){
 }
 
 
-
-
-int main(int argc, char** argv) {
+void readFile(char* fileName){
     char linha[N];
     loc = NULL;
-    FILE *f = fopen("info.txt","r");
+    FILE* f = fopen(fileName,"r");
 
 
-    if(f!= NULL) {
-        while(fgets(linha,N,f)) {trataLinha(linha);}
-    }
-
-    printEstruturas();
+    if(f!= NULL) { while(fgets(linha,N,f)) {trataLinha(linha);}}
     fclose(f);
-    return (EXIT_SUCCESS);
 }
 
 

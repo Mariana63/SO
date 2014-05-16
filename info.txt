@@ -3,3 +3,4 @@ Braga:Barcelos:123
 Braga:Braga:205
 Braga:Cabeceiras de Basto:76
 Braga:Guimarães:21
+
