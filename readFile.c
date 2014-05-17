@@ -1,4 +1,4 @@
-#include "readFile.h"
+﻿#include "readFile.h"
 
 
 //inicializar estrutura
@@ -6,16 +6,16 @@ struct Localidades *loc;
 
 
 void printEstruturas(){
-
-    while(loc!= NULL){
-        while(loc->prefixo!=NULL){
-            if(loc->prefixo->next == NULL) printf("Nº de casos: %d\n", loc->prefixo->c.nrCasos);
-             else printf("Região: %s\n", loc->prefixo->c.regiao);    
+struct Localidades *aux = loc;
+    while(aux!= NULL){
+        while(aux->prefixo!=NULL){
+            if(aux->prefixo->next == NULL) printf("Nº de casos: %d\n", aux->prefixo->c.nrCasos);
+             else printf("Região: %s\n", aux->prefixo->c.regiao);    
                 
-            loc->prefixo=(loc->prefixo)->next;
+            aux->prefixo=(loc->prefixo)->next;
         }
         printf("NOVA LINHA\n");
-        loc=loc->next;
+        aux=aux->next;
     }
 }
 
