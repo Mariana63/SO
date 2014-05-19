@@ -1,7 +1,7 @@
-﻿#include "readFile.h"
+#include "readFile.h"
+#include "struct.h"
 
 
-//inicializar estrutura
 struct Localidades *loc;
 
 
