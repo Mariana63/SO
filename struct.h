@@ -7,21 +7,31 @@
 
 
 
-typedef union Componente{
-    char *regiao;
-    int nrCasos; 
-}Componente; 
+typedef struct s_freguesia{
+    char*freguesia;
+    int casos;
+    Freguesia*next;
 
 
-typedef struct Localidade{
-    Componente c;
-    struct Localidade *next;
-}Localidade;
+}Freguesia;
 
-typedef struct Localidades{
-    struct Localidade *prefixo;
-    struct Localidades *next;
-}Localidades;
+typedef struct s_concelho{
+    char *concelho;
+    int casos;
+    Freguesia *f;
+    Concelho *next;
+}Concelho; 
+
+
+typedef struct s_distrito{
+    char* d;
+    Concelho *c;
+    Distrito *next;
+}Distrito;
+
+typedef struct s_registo{
+    Distrito *root;
+}Registo;
 
 
 #endif
