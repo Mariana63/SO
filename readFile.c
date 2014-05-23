@@ -2,104 +2,177 @@
 #include "struct.h"
 
 
-struct Localidades *loc;
+Registo *loc;
+
+void novoReg() {
+    loc = (Registo*) malloc(sizeof (Registo));
+    loc->root = NULL;
 
 
-void printEstruturas(){
-struct Localidades *aux = loc;
-    while(aux!= NULL){
-        while(aux->prefixo!=NULL){
-            if(aux->prefixo->next == NULL) printf("Nº de casos: %d\n", aux->prefixo->c.nrCasos);
-             else printf("Região: %s\n", aux->prefixo->c.regiao);    
-                
-            aux->prefixo=(aux->prefixo)->next;
+}
+
+void printEstruturas() {
+
+    Distrito *a = loc->root;
+    while (a != NULL) {
+         printf(" %s:",a->d);
+        Concelho *b = a->c;
+        while(b!=NULL){
+             printf(" %s:",b->concelho);
+            Freguesia *c = b->f;
+            
+            while(c!=NULL){
+                printf(" %s\n",c->freguesia);
+                c=c->next;
+            }
+            b=b->next;
         }
-        printf("NOVA LINHA\n");
-        aux=aux->next;
+
+
+        a=a->next;
     }
+
+
 }
 
+void populaEstruturas(char* distrito, char* concelho, char* freguesia, int nrComponentes, int nrCasos) {
+    Distrito *d = (Distrito*) malloc(sizeof (Distrito));
+    Distrito *a = loc->root;
+    int f = 0, g = 0, h = 0;
 
 
-void populaEstruturas(char* distrito, char* concelho, char* freguesia, int nrComponentes, int nrCasos){
-    Localidade *la = (Localidade*) malloc(sizeof(Localidade));
-    la->c.regiao=strdup(distrito);
-  
-    Localidade *lb  = (Localidade*)malloc(sizeof(Localidade));
-    lb->c.regiao=strdup(concelho);
+    while (a != NULL && f != 1) {
+
+        if (!strcmp(a->d, distrito) && nrComponentes >= 1) {
+            a->casos += nrCasos;
+            f = 1;
+            Concelho *b = a->c;
+
+            while (b != NULL && g != 1) {
+                if (!strcmp(b->concelho, concelho) && nrComponentes >= 2) {
+                    g = 1;
+                    b->casos += nrCasos;
+                    Freguesia *c = b->f;
+                    while (c != NULL && h != 1) {
+                        if (!strcmp(c->freguesia, freguesia) && nrComponentes >= 3) {
+                            h = 1;
+                            c->casos += nrCasos;
+                        } else {
+
+                            c = c->next;
+                        }
+                    }
+                    if (c == NULL && h == 0) {
+                        Freguesia *nf = (Freguesia*) malloc(sizeof (Freguesia));
+                        nf->freguesia = strdup(freguesia);
+
+                        nf->casos = nrCasos;
+                        nf->next = b->f;
+                        b->f = nf;
 
 
-    la->next=lb;
-    
-    if(nrComponentes==3){
-        Localidade *lc  =(Localidade*) malloc(sizeof(Localidade));
-        lc->c.regiao=strdup(freguesia);
+                    }
+                } else {
 
-        lb->next = lc;  
-      
-       Localidade *ca =(Localidade*) malloc(sizeof(Localidade));
-       ca->c.nrCasos = nrCasos;
-       ca->next = NULL;
 
-       lc->next = ca;
+                    b = b->next;
+                }
+
+            }
+            if (b == NULL && g == 0) {
+
+                Concelho *nc = (Concelho*) malloc(sizeof (Concelho));
+                nc->concelho = strdup(concelho);
+
+                Freguesia *nf = (Freguesia*) malloc(sizeof (Freguesia));
+                nf->freguesia = strdup(freguesia);
+                nc->f = nf;
+                nc->casos = nrCasos;
+                nf->casos = nrCasos;
+                nf->next = NULL;
+                nc->next = a->c;
+                a->c = nc;
+
+            }
+        } else {
+            a = a->next;
+        }
+
+
+
     }
+    if (a == NULL && f == 0) {
+        d->d = strdup(distrito);
+        d->casos = nrCasos;
 
-    else{
-        Localidade *cb =(Localidade*) malloc(sizeof(Localidade));
-        cb->c.nrCasos = nrCasos;
-        cb->next = NULL;
 
-        lb->next = cb;
-    }
-    
-    Localidades *aux = malloc(sizeof(Localidades));
-    aux->prefixo = la;
-    aux->next = loc;
-    loc = aux; 
+        Concelho *nc = (Concelho*) malloc(sizeof (Concelho));
+        nc->concelho = strdup(concelho);
+
+        Freguesia *nf = (Freguesia*) malloc(sizeof (Freguesia));
+        nf->freguesia = strdup(freguesia);
+        nc->f = nf;
+        nc->casos = nrCasos;
+        nf->casos = nrCasos;
+        nc->next = NULL;
+        nf->next = NULL;
+        d->next = loc->root;
+        loc->root = d;
+    } else free(d);
+
+
+
 }
 
-
-
-void trataLinha(char* linha){
+void trataLinha(char* linha) {
     char *distrito, *concelho, *freguesia;
-    int nrCasos=0;
-    char palavra[N]; 
+    int nrCasos = 0;
+    char palavra[N];
     memset(&palavra, 0, N);
-    int i=0, j=0, nrComponentes=0;
+    int i = 0, j = 0, nrComponentes = 0;
 
-      while(linha[i]!= '\n'){
-        if(linha[i]==':'){
+    while (linha[i] != '\n') {
+        if (linha[i] == ':') {
             nrComponentes++;
 
 
-            if(nrComponentes==1){distrito=strdup(palavra);}
-            if(nrComponentes==2){concelho=strdup(palavra);}
-            if(nrComponentes==3){freguesia=strdup(palavra);}
+            if (nrComponentes == 1) {
+                distrito = strdup(palavra);
+            }
+            if (nrComponentes == 2) {
+                concelho = strdup(palavra);
+            }
+            if (nrComponentes == 3) {
+                freguesia = strdup(palavra);
+            }
             memset(&palavra, 0, N);
-            j=0; i++;
-        } 
-
-        else{
-            palavra[j]=linha[i];
-            i++; j++;
+            j = 0;
+            i++;
+        } else {
+            palavra[j] = linha[i];
+            i++;
+            j++;
         }
     }
-    nrCasos=atoi(palavra);
+    nrCasos = atoi(palavra);
     populaEstruturas(distrito, concelho, freguesia, nrComponentes, nrCasos);
 }
 
-
-void readFile(char* fileName){
+void readFile(char* fileName) {
     char linha[N];
-    loc = NULL;
-    FILE* f = fopen(fileName,"r");
+    novoReg();
+    FILE* f = fopen(fileName, "r");
 
 
-    if(f!= NULL) { while(fgets(linha,N,f)) {trataLinha(linha);}}
+    if (f != NULL) {
+        while (fgets(linha, N, f)) {
+            trataLinha(linha);
+        }
+    }
     fclose(f);
 }
 
 
-   
+
 
 
