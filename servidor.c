@@ -7,7 +7,7 @@
 #include "struct.h"
 
 
-int main() {
+int mainD() {
 
    // readFile("info.txt");
     //printEstruturas();
