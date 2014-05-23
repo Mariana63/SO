@@ -13,9 +13,9 @@ void printEstruturas();
 
 void populaEstruturas(char*, char*, char*, int, int);
 
-void trataLinha(char*);
+void trataLinha(char*nome);
 
-void readFile(char*);
+void readFile(char*nome);
 
 
 #endif

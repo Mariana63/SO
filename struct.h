@@ -10,7 +10,7 @@
 typedef struct s_freguesia{
     char*freguesia;
     int casos;
-    struct s_frefuesia *next;
+    struct s_freguesia *next;
 
 
 }Freguesia;
@@ -25,6 +25,7 @@ typedef struct s_concelho{
 
 typedef struct s_distrito{
     char* d;
+    int casos;
     Concelho *c;
     struct s_distrito *next;
 }Distrito;
