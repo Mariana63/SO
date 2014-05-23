@@ -23,9 +23,8 @@ void printEstruturas() {
             
             while(c!=NULL){
                 printf(" %s\n",c->freguesia);
-                c=c->next;
             }
-           b=b->next; 
+            
         }
 
 
