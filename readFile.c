@@ -15,21 +15,21 @@ void printEstruturas() {
 
     Distrito *a = loc->root;
     while (a != NULL) {
-         printf(" %s:",a->d);
+        printf("1-%s: \n", a->d);
         Concelho *b = a->c;
-        while(b!=NULL){
-             printf(" %s:",b->concelho);
+        while (b != NULL) {
+            printf("concelho : %s:\n", b->concelho);
             Freguesia *c = b->f;
-            
-            while(c!=NULL){
-                printf(" %s\n",c->freguesia);
-                c=c->next;
+
+            while (c != NULL) {
+                printf("freg : %s\n", c->freguesia);
+                c = c->next;
             }
-            b=b->next;
+            b = b->next;
         }
 
 
-        a=a->next;
+        a = a->next;
     }
 
 
@@ -44,17 +44,20 @@ void populaEstruturas(char* distrito, char* concelho, char* freguesia, int nrCom
     while (a != NULL && f != 1) {
 
         if (!strcmp(a->d, distrito) && nrComponentes >= 1) {
+              printf("JA eciste distrito %s\n",distrito);
             a->casos += nrCasos;
             f = 1;
             Concelho *b = a->c;
 
             while (b != NULL && g != 1) {
                 if (!strcmp(b->concelho, concelho) && nrComponentes >= 2) {
+                    printf("JA eciste concelho %s\n",concelho);
                     g = 1;
                     b->casos += nrCasos;
                     Freguesia *c = b->f;
                     while (c != NULL && h != 1) {
                         if (!strcmp(c->freguesia, freguesia) && nrComponentes >= 3) {
+                              printf("JA eciste freg %s\n",freguesia);
                             h = 1;
                             c->casos += nrCasos;
                         } else {
@@ -62,7 +65,8 @@ void populaEstruturas(char* distrito, char* concelho, char* freguesia, int nrCom
                             c = c->next;
                         }
                     }
-                    if (c == NULL && h == 0) {
+                    if (c == NULL && h == 0&& nrComponentes>2) {
+                        printf("criar F %s \n",freguesia);
                         Freguesia *nf = (Freguesia*) malloc(sizeof (Freguesia));
                         nf->freguesia = strdup(freguesia);
 
@@ -80,16 +84,23 @@ void populaEstruturas(char* distrito, char* concelho, char* freguesia, int nrCom
 
             }
             if (b == NULL && g == 0) {
-
+printf("criar C %s \n",concelho);
                 Concelho *nc = (Concelho*) malloc(sizeof (Concelho));
                 nc->concelho = strdup(concelho);
+                if (nrComponentes > 2) {
+                    Freguesia *nf = (Freguesia*) malloc(sizeof (Freguesia));
+                    nf->freguesia = strdup(freguesia);
+                    nc->f = nf;
+                    nf->next = NULL;
+                    nf->casos = nrCasos;
+                } else {
+                    nc->f = NULL;
+                }
 
-                Freguesia *nf = (Freguesia*) malloc(sizeof (Freguesia));
-                nf->freguesia = strdup(freguesia);
-                nc->f = nf;
+
                 nc->casos = nrCasos;
-                nf->casos = nrCasos;
-                nf->next = NULL;
+
+
                 nc->next = a->c;
                 a->c = nc;
 
@@ -102,20 +113,26 @@ void populaEstruturas(char* distrito, char* concelho, char* freguesia, int nrCom
 
     }
     if (a == NULL && f == 0) {
+        printf("criar D %s \n",distrito);
         d->d = strdup(distrito);
         d->casos = nrCasos;
 
 
         Concelho *nc = (Concelho*) malloc(sizeof (Concelho));
         nc->concelho = strdup(concelho);
-
-        Freguesia *nf = (Freguesia*) malloc(sizeof (Freguesia));
-        nf->freguesia = strdup(freguesia);
-        nc->f = nf;
+        if (nrComponentes > 2) {
+            Freguesia *nf = (Freguesia*) malloc(sizeof (Freguesia));
+            nf->freguesia = strdup(freguesia);
+            nc->f = nf;
+            nf->next = NULL;
+            nf->casos = nrCasos;
+        } else {
+            nc->f = NULL;
+        }
         nc->casos = nrCasos;
-        nf->casos = nrCasos;
+
         nc->next = NULL;
-        nf->next = NULL;
+
         d->next = loc->root;
         loc->root = d;
     } else free(d);
@@ -155,6 +172,7 @@ void trataLinha(char* linha) {
         }
     }
     nrCasos = atoi(palavra);
+    printf("D: %s , C: %s , F: %s , Com: %d,caso: %d \n",distrito,concelho,freguesia,nrComponentes,nrCasos);
     populaEstruturas(distrito, concelho, freguesia, nrComponentes, nrCasos);
 }
 
