@@ -5,7 +5,10 @@
 
 
 int agregar(char *prefixo[], unsigned nivel, char *path){
-	/*  */
+	char *distrito = strdup(  prefixo[0]);	
+  char *concelho= strdup(  prefixo[1]);
+  char *freguesia = strdup(  prefixo[2]);
+  agrega(distrito,concelho,freguesia,nivel,path);
 	return 0;
 }
 

@@ -34,7 +34,10 @@ void printEstruturas() {
 
 
 }
+void agrega(char*distrito,char*concelho,char*freguesia,int nivel,char *path){
+    int fildes = open(path,O_WRONLY);
 
+}
 void populaEstruturas(char* distrito, char* concelho, char* freguesia, int nrComponentes, int nrCasos) {
     Distrito *d = (Distrito*) malloc(sizeof (Distrito));
     Distrito *a = loc->root;
