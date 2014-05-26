@@ -1,6 +1,6 @@
 #include "readFile.h"
 #include "struct.h"
-
+#include <fcntl.h>
 
 Registo *loc;
 
@@ -15,21 +15,21 @@ void printEstruturas() {
 
     Distrito *a = loc->root;
     while (a != NULL) {
-         printf(" %s:",a->d);
+        printf("Distrito:%s: \n", a->d);
         Concelho *b = a->c;
-        while(b!=NULL){
-             printf(" %s:",b->concelho);
+        while (b != NULL) {
+            printf("concelho : %s:\n", b->concelho);
             Freguesia *c = b->f;
-            
-            while(c!=NULL){
-                printf(" %s\n",c->freguesia);
-                c=c->next;
+
+            while (c != NULL) {
+                printf("freg : %s", c->freguesia);
+                c = c->next;
             }
-            b=b->next;
+            b = b->next;
         }
 
 
-        a=a->next;
+        a = a->next;
     }
 
 
@@ -44,17 +44,20 @@ void populaEstruturas(char* distrito, char* concelho, char* freguesia, int nrCom
     while (a != NULL && f != 1) {
 
         if (!strcmp(a->d, distrito) && nrComponentes >= 1) {
+              
             a->casos += nrCasos;
             f = 1;
             Concelho *b = a->c;
 
             while (b != NULL && g != 1) {
                 if (!strcmp(b->concelho, concelho) && nrComponentes >= 2) {
+                   
                     g = 1;
                     b->casos += nrCasos;
                     Freguesia *c = b->f;
                     while (c != NULL && h != 1) {
                         if (!strcmp(c->freguesia, freguesia) && nrComponentes >= 3) {
+                             
                             h = 1;
                             c->casos += nrCasos;
                         } else {
@@ -62,7 +65,8 @@ void populaEstruturas(char* distrito, char* concelho, char* freguesia, int nrCom
                             c = c->next;
                         }
                     }
-                    if (c == NULL && h == 0) {
+                    if (c == NULL && h == 0&& nrComponentes>2) {
+                     
                         Freguesia *nf = (Freguesia*) malloc(sizeof (Freguesia));
                         nf->freguesia = strdup(freguesia);
 
@@ -83,13 +87,20 @@ void populaEstruturas(char* distrito, char* concelho, char* freguesia, int nrCom
 
                 Concelho *nc = (Concelho*) malloc(sizeof (Concelho));
                 nc->concelho = strdup(concelho);
+                if (nrComponentes > 2) {
+                    Freguesia *nf = (Freguesia*) malloc(sizeof (Freguesia));
+                    nf->freguesia = strdup(freguesia);
+                    nc->f = nf;
+                    nf->next = NULL;
+                    nf->casos = nrCasos;
+                } else {
+                    nc->f = NULL;
+                }
 
-                Freguesia *nf = (Freguesia*) malloc(sizeof (Freguesia));
-                nf->freguesia = strdup(freguesia);
-                nc->f = nf;
+
                 nc->casos = nrCasos;
-                nf->casos = nrCasos;
-                nf->next = NULL;
+
+
                 nc->next = a->c;
                 a->c = nc;
 
@@ -102,25 +113,31 @@ void populaEstruturas(char* distrito, char* concelho, char* freguesia, int nrCom
 
     }
     if (a == NULL && f == 0) {
+      
         d->d = strdup(distrito);
         d->casos = nrCasos;
 
 
         Concelho *nc = (Concelho*) malloc(sizeof (Concelho));
         nc->concelho = strdup(concelho);
-
-        Freguesia *nf = (Freguesia*) malloc(sizeof (Freguesia));
-        nf->freguesia = strdup(freguesia);
-        nc->f = nf;
+        if (nrComponentes > 2) {
+            Freguesia *nf = (Freguesia*) malloc(sizeof (Freguesia));
+            nf->freguesia = strdup(freguesia);
+            nc->f = nf;
+            nf->next = NULL;
+            nf->casos = nrCasos;
+        } else {
+            nc->f = NULL;
+        }
         nc->casos = nrCasos;
-        nf->casos = nrCasos;
+
         nc->next = NULL;
-        nf->next = NULL;
+        d->c = nc;
         d->next = loc->root;
         loc->root = d;
     } else free(d);
 
-
+    
 
 }
 
@@ -130,7 +147,7 @@ void trataLinha(char* linha) {
     char palavra[N];
     memset(&palavra, 0, N);
     int i = 0, j = 0, nrComponentes = 0;
-
+    
     while (linha[i] != '\n') {
         if (linha[i] == ':') {
             nrComponentes++;
@@ -155,21 +172,28 @@ void trataLinha(char* linha) {
         }
     }
     nrCasos = atoi(palavra);
+     
     populaEstruturas(distrito, concelho, freguesia, nrComponentes, nrCasos);
+    
+    if(linha[i+1]>=65 && linha[i+1]<=122){ trataLinha(linha+i+1);}
+  
 }
 
 void readFile(char* fileName) {
-    char linha[N];
+    char linha[N];int n;
     novoReg();
-    FILE* f = fopen(fileName, "r");
+    int filedes = open(fileName,O_RDONLY);
+   
 
 
-    if (f != NULL) {
-        while (fgets(linha, N, f)) {
+    if (filedes >0) {
+       
+        while ((n=read(filedes, linha, N))!= 0) {
+            
             trataLinha(linha);
         }
     }
-    fclose(f);
+    close(filedes);
 }
 
 
