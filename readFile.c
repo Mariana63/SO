@@ -1,6 +1,6 @@
 #include "readFile.h"
 #include "struct.h"
-
+#include <fcntl.h>
 
 Registo *loc;
 
@@ -137,7 +137,7 @@ void populaEstruturas(char* distrito, char* concelho, char* freguesia, int nrCom
         loc->root = d;
     } else free(d);
 
-
+    
 
 }
 
@@ -147,7 +147,7 @@ void trataLinha(char* linha) {
     char palavra[N];
     memset(&palavra, 0, N);
     int i = 0, j = 0, nrComponentes = 0;
-
+    
     while (linha[i] != '\n') {
         if (linha[i] == ':') {
             nrComponentes++;
@@ -172,22 +172,28 @@ void trataLinha(char* linha) {
         }
     }
     nrCasos = atoi(palavra);
-    
+     
     populaEstruturas(distrito, concelho, freguesia, nrComponentes, nrCasos);
+    
+    if(linha[i+1]>=65 && linha[i+1]<=122){ trataLinha(linha+i+1);}
+  
 }
 
 void readFile(char* fileName) {
-    char linha[N];
+    char linha[N];int n;
     novoReg();
-    FILE* f = fopen(fileName, "r");
+    int filedes = open(fileName,O_RDONLY);
+   
 
 
-    if (f != NULL) {
-        while (fgets(linha, N, f)) {
+    if (filedes >0) {
+       
+        while ((n=read(filedes, linha, N))!= 0) {
+            
             trataLinha(linha);
         }
     }
-    fclose(f);
+    close(filedes);
 }
 
 

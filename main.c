@@ -10,8 +10,7 @@
 int main(int argc, char** argv) {
     readFile("info.txt");
     printEstruturas();
-    printf("OLE\n");
-printEstruturas();
+   
     return (EXIT_SUCCESS);
 }
 
