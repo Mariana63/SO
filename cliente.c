@@ -70,41 +70,62 @@ int main(int argc, char*argv[]) {
 
 
     } else if (buffer[0] == '2') {
-        char* p;
+        char* p[3];
         int nivel;
+        int i = 0;
         write(1, "0, 1 ou 2:\n", 12);
-        read(0, buffer, 1);
-        if (buffer[0] <= 2 && buffer[0] >= 0) {
-            nivel = atoi(buffer[0]);
+        read(0, buffer, 2);
+        if (buffer[0] <= '2' && buffer[0] >= '0') {
+            nivel = buffer[0]-'0';
+  
+                memset(buffer, 0, 100);
 
-
-            /*   if (nivel >= 0) {
-                   char distrito[30];
-                   write(1, "Digite o nome do ficheiro:\n", 28);
-                   scanf("%s", distrito);
-                   p[0] = distrito;
-
+              if (nivel >= 0) {
+                   
+                   write(1, "Digite distrito:\n", 17);
+                   read(0,buffer,30);
+                   buffer[strlen(buffer)-1] = '\0';
+                   p[0] = strdup(buffer);
+    
+                memset(buffer, 0, 100);
+                
                    if (nivel >= 1) {
-                       char concelho[30];
-                       printf("Digite o Conselho:\n");
-                       scanf("%s", concelho);
-                       p[1] = concelho;
-
+                      
+                      write(1, "Digite Concelho:\n", 17);
+                   read(0,buffer,30);
+                    buffer[strlen(buffer)-1] = '\0';
+                   p[1] = strdup(buffer);
+                   memset(buffer, 0, 100);
                        if (nivel == 2) {
-                           char freguesia[30];
-                           printf("Digite o Freguesia:\n");
-                           scanf("%s", freguesia);
-                           p[2] = freguesia;
+                            write(1, "Digite freguesia:\n", 18);
+                   read(0,buffer,30);
+                   buffer[strlen(buffer)-1] = '\0';
+                   p[2] = strdup(buffer);
+                   memset(buffer, 0, 100);
+                          
                        }
                    }
                }
 
 
-               int valor;
-               printf("Digite o valor a incrementar:\n");
-               scanf("%d", &valor);
+            
 
-               //mandar para o pipe*/
+               //mandar para o pipe
+                    write(n, "i:", sizeof (char)*2);
+                
+                write(n, &nivel, 1);
+                printf("nivel:%d \n",nivel);
+                while(i<=nivel) {
+                write(n, p[i], sizeof (char)*strlen(p[i]));
+                 write(n, ':', 1);
+                
+                 printf("--%s--\n",p[i]);
+                  i++;
+                }
+                
+                
+                
+             
         }
     }
 

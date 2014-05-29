@@ -27,7 +27,7 @@ void main(){
             
              //ler ate :
              memset(pref,0,15);
-              while( i<nivel){
+              while( i<=nivel){
                  read(li,buffer,1);
                  
                  if(buffer[0]!=':')
@@ -55,7 +55,29 @@ void main(){
           // agregar(prefixo,nivel,ficheiro);
             }
              if (buffer[0]=='i'){
-             write(1,"INC",5);            
+             write(1,"INC\n",5); 
+             read(li,buffer,1);
+             nivel = buffer[0]-'0';
+             printf("---%d---\n",nivel);
+              memset(pref,0,15);
+              while( i<nivel){
+                 read(li,buffer,1);
+                 
+                 if(buffer[0]!=':')
+                 {printf("ppref %s",pref);
+                     prefixo[i] = strdup(pref);
+                     memset(pref,0,15);
+                     i++;
+                 }else
+                 {
+                 
+                
+                 pref[j] = buffer[0];
+                 j++;
+                
+                 }
+                 
+             }
                 
             }
         
