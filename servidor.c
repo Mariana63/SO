@@ -15,23 +15,28 @@ void main(){
     char pref[15];
    mkfifo("/tmp/Serv",0666);
     int li = open("/tmp/Serv",O_RDONLY);
+  
     while(1){
         
         if((r=read(li,buffer,2))!=0){
         
           if (buffer[0]=='a'){
+                write(1,"ARG\n",5); 
+             
                         
              read(li,buffer,1);
              nivel = buffer[0]-'0';
-             printf("---%d---\n",nivel);
+             printf("nA:%d\n",nivel);
             
-             //ler ate :
+        
              memset(pref,0,15);
+               
               while( i<=nivel){
+                  
                  read(li,buffer,1);
-                 
-                 if(buffer[0]!=':')
-                 {printf("ppref %s",pref);
+                 printf("A:-%c-\n",buffer[0]);
+                 if(buffer[0]==':')
+                 {printf("A,cenas\n");
                      prefixo[i] = strdup(pref);
                      memset(pref,0,15);
                      i++;
@@ -50,21 +55,23 @@ void main(){
                  
                  pref[j]= buffer[0];
             }
+             pref[strlen(pref)-1]='\0';
            char *  ficheiro = strdup(pref);
-           printf("%s\n,%d\n",ficheiro,nivel);
+         printf("NiVA: %d, %s-%c",nivel,ficheiro,buffer[0]); 
           // agregar(prefixo,nivel,ficheiro);
             }
-             if (buffer[0]=='i'){
+          else if (buffer[0]=='i'){
              write(1,"INC\n",5); 
              read(li,buffer,1);
-             nivel = buffer[0]-'0';
-             printf("---%d---\n",nivel);
+             nivel = buffer[0];
+             printf("nI:%d\n",nivel);
               memset(pref,0,15);
               while( i<nivel){
-                 read(li,buffer,1);
                  
-                 if(buffer[0]!=':')
-                 {printf("ppref %s",pref);
+                 read(li,buffer,1);
+                  printf("I:-%c- \n",buffer[0]);
+                 if(buffer[0]==':')
+                 {printf("I,cenas\n");
                      prefixo[i] = strdup(pref);
                      memset(pref,0,15);
                      i++;
@@ -76,7 +83,7 @@ void main(){
                  j++;
                 
                  }
-                 
+               printf("NivelI: %d,prefixo %s-buff-%c",i,prefixo[i-1],buffer[0]); 
              }
                 
             }
@@ -87,6 +94,5 @@ void main(){
     
     
     }
-
 
 }
