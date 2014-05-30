@@ -66,15 +66,17 @@ void main(){
              nivel = buffer[0];
              printf("nI:%d\n",nivel);
               memset(pref,0,15);
-              while( i<nivel){
+              while( i<=nivel){
                  
                  read(li,buffer,1);
                   printf("I:-%c- \n",buffer[0]);
                  if(buffer[0]==':')
-                 {printf("I,cenas\n");
-                     prefixo[i] = strdup(pref);
+                 {printf("I,cenas.%s\n",pref);
+                 char *aux = strdup(pref);
+                     prefixo[i] = aux;
                      memset(pref,0,15);
                      i++;
+                     j=0;
                  }else
                  {
                  
@@ -83,7 +85,7 @@ void main(){
                  j++;
                 
                  }
-               printf("NivelI: %d,prefixo %s-buff-%c",i,prefixo[i-1],buffer[0]); 
+              printf("NivelI: %d,prefixo %s-buff-%c",i,prefixo[i],buffer[0]);  
              }
                 
             }
