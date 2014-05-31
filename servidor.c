@@ -58,7 +58,7 @@ void main() {
                         //mandar para o filho pelo pipe g
                     }
                 } else {
-                    dist[n] = strup(pref);
+                    dist[n] = strdup(pref);
                     pipe(pipek[n]);
                     n++;
                     
