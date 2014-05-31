@@ -63,16 +63,17 @@ int main(int argc, char*argv[]) {
         }
     } else if (buffer[0] == '2') {
         char* p[3];
-        int nivel;
+       char nivel;
+       int nivel2;
         int i = 0;
         write(1, "0, 1 ou 2:\n", 12);
         read(0, buffer, 2);
         if (buffer[0] <= '2' && buffer[0] >= '0') {
-            nivel = buffer[0] - '0';
-
+            nivel2 = buffer[0] - '0';
+            nivel = buffer[0];
             memset(buffer, 0, 100);
 
-            if (nivel >= 0) {
+            if (nivel2 >= 0) {
 
                 write(1, "Digite distrito:\n", 17);
                 read(0, buffer, 30);
@@ -81,14 +82,14 @@ int main(int argc, char*argv[]) {
 
                 memset(buffer, 0, 100);
 
-                if (nivel >= 1) {
+                if (nivel2 >= 1) {
 
                     write(1, "Digite Concelho:\n", 17);
                     read(0, buffer, 30);
                     buffer[strlen(buffer) - 1] = '\0';
                     p[1] = strdup(buffer);
                     memset(buffer, 0, 100);
-                    if (nivel == 2) {
+                    if (nivel2 == 2) {
                         write(1, "Digite freguesia:\n", 18);
                         read(0, buffer, 30);
                         buffer[strlen(buffer) - 1] = '\0';
@@ -107,7 +108,7 @@ int main(int argc, char*argv[]) {
           
            
            
-            while (i <= nivel) {
+            while (i <= nivel2) {
                 write(n, p[i], sizeof (char)*strlen(p[i]));
                 write(n, ":", 1);
 

@@ -59,6 +59,7 @@ int main() {
                             fl2=1;
                         } else {
                             write(pipek[g][1], (&buffer[0]), 1);
+                           
                         }
 
                         //mandar para o filho pelo pipe g
