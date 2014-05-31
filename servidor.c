@@ -14,6 +14,8 @@ int fAct(char*s) {
     int i = 0, f = -1;
     while (i < n && f == -1) {
         if ((strcmp(dist[i], s)) == 0) {
+            printf("%s---%s\n",dist[i],s);
+            printf("AKI D\n");
             f = i;
         } else i++;
 
@@ -34,23 +36,26 @@ void main() {
     while (1) {
 
         if ((r = read(li, buffer, 1)) != 0) {
-
-           
-                
+         
+           pref[j] = buffer[0];
+           j++;
+         
                 while (buffer[0] != ':') {
                     read(li, buffer, 1);
                     pref[j] = buffer[0];
                     j++;
                 }
-                pref[j] = '\0';
+                pref[j-1] = '\0';
+                printf(" SATARING:-%s-\n",pref);
                 int g = fAct(pref);
                 if (g != -1) {
-                   
+                    int fl2 = 0;
                       
-                    while ((read(li, buffer, 1)) != 0) {
+                    while ((read(li, buffer, 1)) != 0,!fl2) {
                         if (buffer[0] >= '1' && buffer[0] <= '9') {
+                            printf("Acabou:\n");
                             write(pipek[g][1], buffer[0], 1);
-                            break;
+                            fl2=1;
                         } else {
                             write(pipek[g][1], buffer[0], 1);
                         }
@@ -59,17 +64,22 @@ void main() {
                     }
                 } else {
                     dist[n] = strdup(pref);
+                    printf("SATARTING2:%s\n",dist[n]);
                     pipe(pipek[n]);
                     n++;
                     
 
                     if (!fork()) {
                         char *Dist = strdup(pref);
+                          printf("SATARTING3:%s\n",Dist);
                         close(pipek[n-1][1]);
+                        
                         while(1){
                         
-                            if((read(pipek[n-1][1],buffer,1))!=0){
+                            if((read(pipek[n-1][0],buffer,1))!=0){
+                                
                                 printf("--%c--\n",buffer[0]);
+                                
                             }
                         
                         
@@ -78,16 +88,19 @@ void main() {
                         
 
                     } else {close(pipek[n-1][0]);
-                          write(pipek[n-1][1], "i:", sizeof (char)*2);
+                          
                        write(pipek[n-1][1], pref, strlen(pref));
                         write(pipek[n-1][1], ":", sizeof (char));
-                        
-                        while ((read(li, buffer, 1)) != 0) {
-                            if (buffer[0] >= '1' && buffer[0] <= '9') {
+                        int fl = 0;
+                        while ((read(li, buffer, 1)) != 0&& !fl) {
+                            if (buffer[0] >= '1' && buffer[0] <= '9') {  printf("Acabou2:\n");
+                                
                                 write(pipek[n - 1][1], buffer[0], 1);
-                                break;
+                                
+                                fl = 1;
                             } else {
                                 write(pipek[n - 1][1], buffer[0], 1);
+                                
                             }
                         }//fork pa novo filho; add novo dist a lista e mandar pelo pipe
 

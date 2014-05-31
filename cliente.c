@@ -102,7 +102,7 @@ int main(int argc, char*argv[]) {
 
 
             //mandar para o pipe
-            write(n, "i:", sizeof (char)*2);
+            
           
            
            
@@ -113,6 +113,7 @@ int main(int argc, char*argv[]) {
                 
                 i++;
             }
+            write(n, "i:", sizeof (char)*2);
              write(n, &nivel, 1);
 
 
