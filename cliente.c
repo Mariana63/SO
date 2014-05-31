@@ -116,7 +116,7 @@ int main(int argc, char*argv[]) {
             //mandar para o pipe -> n
             write(n,p[0],sizeof(char)*strlen(p[0]));
             write(n,":",1);
-            write(n,"a:",2);
+            write(n,"i:",2);
             write(n,&nivel2,1);
             write(n,":",1);
 

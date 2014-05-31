@@ -96,6 +96,8 @@ int main() {
                         write(pipek[n-1][1], ":", sizeof (char));
                         int fl = 0;
                         while ((read(li, buffer, 1)) != 0&& !fl) {
+
+
                             if (buffer[0]=='9') {  
                                 printf("Acaboude mandar po filho novo:\n");
                                 
