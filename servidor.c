@@ -46,8 +46,7 @@ void main() {
                 int g = fAct(pref);
                 if (g != -1) {
                    
-                       write(pipek[g][1], pref, strlen(pref));
-                        write(pipek[g][1], ":", sizeof (char));
+                      
                     while ((read(li, buffer, 1)) != 0) {
                         if (buffer[0] >= '1' && buffer[0] <= '9') {
                             write(pipek[g][1], buffer[0], 1);
@@ -69,7 +68,9 @@ void main() {
                         close(pipek[n-1][1]);
                         while(1){
                         
-                           // if((read(pipe[n][1]),buffer,2)!=0);
+                            if((read(pipek[n-1][1],buffer,1))!=0){
+                                printf("--%c--\n",buffer[0]);
+                            }
                         
                         
                         
