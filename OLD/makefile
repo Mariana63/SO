@@ -1,4 +1,4 @@
-SRC = readFile.c servidor.c biblioteca.c
+SRC = servidor.c cliente.c
 CCFLAGS = -O3 -Wall -Wextra
 CCC = gcc
 FILE = SO

@@ -1,10 +1,11 @@
-
-
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
 char*dist[32];
 int pipek[32][2];
 int n;
@@ -23,7 +24,7 @@ int fAct(char*s) {
     return f;
 }
 
-void main() {
+int main() {
     char buffer[100];
     n = 0;
     int j = 0, i = 0, f = 0;
@@ -51,13 +52,13 @@ void main() {
                 if (g != -1) {
                     int fl2 = 0;
                       
-                    while ((read(li, buffer, 1)) != 0,!fl2) {
+                    while ((read(li, buffer, 1)) != 0 && (!fl2)) {
                         if (buffer[0] >= '1' && buffer[0] <= '9') {
                             printf("Acabou:\n");
-                            write(pipek[g][1], buffer[0], 1);
+                            write(pipek[g][1], (&buffer[0]), 1);
                             fl2=1;
                         } else {
-                            write(pipek[g][1], buffer[0], 1);
+                            write(pipek[g][1], (&buffer[0]), 1);
                         }
 
                         //mandar para o filho pelo pipe g
@@ -95,11 +96,11 @@ void main() {
                         while ((read(li, buffer, 1)) != 0&& !fl) {
                             if (buffer[0] >= '1' && buffer[0] <= '9') {  printf("Acabou2:\n");
                                 
-                                write(pipek[n - 1][1], buffer[0], 1);
+                                write(pipek[n - 1][1], (&buffer[0]), 1);
                                 
                                 fl = 1;
                             } else {
-                                write(pipek[n - 1][1], buffer[0], 1);
+                                write(pipek[n - 1][1], (&buffer[0]), 1);
                                 
                             }
                         }//fork pa novo filho; add novo dist a lista e mandar pelo pipe
@@ -113,6 +114,8 @@ void main() {
 
 
     }
+
+    return (EXIT_SUCCESS);
 }
     /* read(li,buffer,1);
                  nivel = buffer[0];
