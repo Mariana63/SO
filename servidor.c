@@ -11,36 +11,30 @@ int pipek[32][2];
 int n;
 
 int fAct(char*s) {
-
-    int i = 0, f = -1;
-    while (i < n && f == -1) {
+    int i=0, f=-1;
+    while (i<n && f==-1) {
         if ((strcmp(dist[i], s)) == 0) {
-         
-            printf("AKI D\n");
-            f = i;
-        } else i++;
-
+            printf("AKI D\n"); f=i;}
+        else i++;
     }
-    return f;
+return f;
 }
 
 int main() {
-    char buffer[100];
+    char buffer[50], pref[15];
+    int j = 0, i = 0, f = 0, r, nivel;
     n = 0;
-    int j = 0, i = 0, f = 0;
-    int r, nivel;
+
    
-    char pref[15];
     mkfifo("/tmp/Serv", 0666);
     int li = open("/tmp/Serv", O_RDONLY);
 
     while (1) {
-
         if ((r = read(li, buffer, 1)) != 0) {
-            j=0;
+            j=0; 
             memset(pref, 0, 15);
-           pref[j] = buffer[0];
-           j++;
+            pref[j] = buffer[0];
+            j++;
          
                 while (buffer[0] != ':') {
                     read(li, buffer, 1);
@@ -102,7 +96,7 @@ int main() {
                         write(pipek[n-1][1], ":", sizeof (char));
                         int fl = 0;
                         while ((read(li, buffer, 1)) != 0&& !fl) {
-                            if (buffer[0] >= '1' && buffer[0] <= '9') {  
+                            if (buffer[0]=='9') {  
                                 printf("Acaboude mandar po filho novo:\n");
                                 
                                 write(pipek[n - 1][1], (&buffer[0]), 1);
