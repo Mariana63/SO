@@ -37,7 +37,7 @@ int main() {
     while (1) {
 
         if ((r = read(li, buffer, 1)) != 0) {
-         
+            memset(pref, 0, 15);
            pref[j] = buffer[0];
            j++;
          
@@ -51,10 +51,11 @@ int main() {
                 int g = fAct(pref);
                 if (g != -1) {
                     int fl2 = 0;
-                      
+                    write(pipek[g][1], pref, strlen(pref));
+                        write(pipek[g][1], ":", sizeof (char));
                     while ((read(li, buffer, 1)) != 0 && (!fl2)) {
                         if (buffer[0] >= '1' && buffer[0] <= '9') {
-                            printf("Acabou:\n");
+                            printf("Acabou de mandar para o que existe_:\n");
                             write(pipek[g][1], (&buffer[0]), 1);
                             fl2=1;
                         } else {
@@ -66,14 +67,14 @@ int main() {
                     }
                 } else {
                     dist[n] = strdup(pref);
-                    printf("SATARTING2:%s\n",dist[n]);
+                    printf("distrito NOVO:%s\n",dist[n]);
                     pipe(pipek[n]);
                     n++;
                     
 
                     if (!fork()) {
                         char *Dist = strdup(pref);
-                          printf("SATARTING3:%s\n",Dist);
+                          printf("Filho Dist ON:%s\n",Dist);
                         close(pipek[n-1][1]);
                         
                         while(1){
@@ -89,13 +90,15 @@ int main() {
                         }
                         
 
-                    } else {close(pipek[n-1][0]);
+                    } else {
+                        close(pipek[n-1][0]);
                           
                        write(pipek[n-1][1], pref, strlen(pref));
                         write(pipek[n-1][1], ":", sizeof (char));
                         int fl = 0;
                         while ((read(li, buffer, 1)) != 0&& !fl) {
-                            if (buffer[0] >= '1' && buffer[0] <= '9') {  printf("Acabou2:\n");
+                            if (buffer[0] >= '1' && buffer[0] <= '9') {  
+                                printf("Acaboude mandar po filho novo:\n");
                                 
                                 write(pipek[n - 1][1], (&buffer[0]), 1);
                                 
