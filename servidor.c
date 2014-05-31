@@ -33,10 +33,10 @@ void main() {
 
     while (1) {
 
-        if ((r = read(li, buffer, 2)) != 0) {
+        if ((r = read(li, buffer, 1)) != 0) {
 
-            if (buffer[0] == 'a') {
-                write(1, "ARG\n", 5);
+           
+                
                 while (buffer[0] != ':') {
                     read(li, buffer, 1);
                     pref[j] = buffer[0];
@@ -45,6 +45,9 @@ void main() {
                 pref[j] = '\0';
                 int g = fAct(pref);
                 if (g != -1) {
+                   
+                       write(pipek[g][1], pref, strlen(pref));
+                        write(pipek[g][1], ":", sizeof (char));
                     while ((read(li, buffer, 1)) != 0) {
                         if (buffer[0] >= '1' && buffer[0] <= '9') {
                             write(pipek[g][1], buffer[0], 1);
@@ -59,54 +62,25 @@ void main() {
                     dist[n] = strup(pref);
                     pipe(pipek[n]);
                     n++;
+                    
 
                     if (!fork()) {
-                        close(pipek[n][1]);
-
-                    } else {
-                        close(pipek[n][0]);
-                        while ((read(li, buffer, 1)) != 0) {
-                            if (buffer[0] >= '1' && buffer[0] <= '9') {
-                                write(pipek[n - 1][1], buffer[0], 1);
-                                break;
-                            } else {
-                                write(pipek[n - 1][1], buffer[0], 1);
-                            }
-                        }//fork pa novo filho; add novo dist a lista e mandar pelo pipe
-
-                    }
-                }
-
-            } else if (buffer[0] == 'i') {
-                write(1, "INC\n", 5);
-                while (buffer[0] != ':') {
-                    read(li, buffer, 1);
-                    pref[j] = buffer[0];
-                    j++;
-                }
-                pref[j] = '\0';
-                int g = fAct(pref);
-                if (g != -1) {
-                    while ((read(li, buffer, 1)) != 0) {
-                        if (buffer[0] >= '1' && buffer[0] <= '9') {
-                            write(pipek[g][1], buffer[0], 1);
-                            break;
-                        } else {
-                            write(pipek[g][1], buffer[0], 1);
+                        char *Dist = strdup(pref);
+                        close(pipek[n-1][1]);
+                        while(1){
+                        
+                           // if((read(pipe[n][1]),buffer,2)!=0);
+                        
+                        
+                        
                         }
+                        
 
-                        //mandar para o filho pelo pipe g
-                    }
-                } else {
-                    dist[n] = strup(pref);
-                    pipe(pipek[n]);
-                    n++;
-
-                    if (!fork()) {
-                        close(pipek[n][1]);
-
-                    } else {
-                        close(pipek[n][0]);
+                    } else {close(pipek[n-1][0]);
+                          write(pipek[n-1][1], "i:", sizeof (char)*2);
+                       write(pipek[n-1][1], pref, strlen(pref));
+                        write(pipek[n-1][1], ":", sizeof (char));
+                        
                         while ((read(li, buffer, 1)) != 0) {
                             if (buffer[0] >= '1' && buffer[0] <= '9') {
                                 write(pipek[n - 1][1], buffer[0], 1);
@@ -118,7 +92,8 @@ void main() {
 
                     }
                 }
-            }
+
+           
 
         }
 

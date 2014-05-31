@@ -39,13 +39,13 @@ int main(int argc, char*argv[]) {
 
                 ficheiro = strdup(buffer);
                 //mandar para o pipe
-                write(n, "a:", sizeof (char)*2);
+                
 
                
 
                 p[strlen(p) - 1] = '\0';
                 write(n, p, sizeof (char)*strlen(p));
-
+                write(n, "a:", sizeof (char)*2);
                  
                 ficheiro[strlen(ficheiro) - 1] = '\0';
                 write(n, ficheiro, sizeof (ficheiro));
