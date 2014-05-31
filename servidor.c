@@ -37,6 +37,7 @@ int main() {
     while (1) {
 
         if ((r = read(li, buffer, 1)) != 0) {
+            j=0;
             memset(pref, 0, 15);
            pref[j] = buffer[0];
            j++;
