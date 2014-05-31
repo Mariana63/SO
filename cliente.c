@@ -41,16 +41,17 @@ int main(int argc, char*argv[]) {
                 //mandar para o pipe
                 write(n, "a:", sizeof (char)*2);
 
-                write(n, &nivel, 1);
+               
 
                 p[strlen(p) - 1] = '\0';
                 write(n, p, sizeof (char)*strlen(p));
 
-
+                 
                 ficheiro[strlen(ficheiro) - 1] = '\0';
                 write(n, ficheiro, sizeof (ficheiro));
 
                 write(n, ":", 1);
+                write(n, &nivel, 1);
             } else {
                 /*/erro*/
             }
@@ -103,7 +104,7 @@ int main(int argc, char*argv[]) {
             //mandar para o pipe
             write(n, "i:", sizeof (char)*2);
           
-            write(n, &nivel, 1);
+           
            
             while (i <= nivel) {
                 write(n, p[i], sizeof (char)*strlen(p[i]));
@@ -112,7 +113,7 @@ int main(int argc, char*argv[]) {
                 
                 i++;
             }
-
+             write(n, &nivel, 1);
 
 
 
