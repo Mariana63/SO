@@ -15,7 +15,7 @@ int fAct(char*s) {
     int i = 0, f = -1;
     while (i < n && f == -1) {
         if ((strcmp(dist[i], s)) == 0) {
-            printf("%s---%s\n",dist[i],s);
+         
             printf("AKI D\n");
             f = i;
         } else i++;
@@ -48,7 +48,7 @@ int main() {
                     j++;
                 }
                 pref[j-1] = '\0';
-                printf(" SATARING:-%s-\n",pref);
+               
                 int g = fAct(pref);
                 if (g != -1) {
                     int fl2 = 0;
@@ -75,7 +75,7 @@ int main() {
 
                     if (!fork()) {
                         char *Dist = strdup(pref);
-                          printf("Filho Dist ON:%s\n",Dist);
+                         
                         close(pipek[n-1][1]);
                         
                         while(1){
