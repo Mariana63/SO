@@ -55,7 +55,7 @@ int main() {
                     write(pipek[g][1], pref, strlen(pref));
                         write(pipek[g][1], ":", sizeof (char));
                     while ((read(li, buffer, 1)) != 0 && (!fl2)) {
-                        if (buffer[0] >= '1' && buffer[0] <= '9') {
+                        if (buffer[0] == '9') {
                             printf("Acabou de mandar para o que existe_:\n");
                             write(pipek[g][1], (&buffer[0]), 1);
                             fl2=1;
@@ -82,6 +82,10 @@ int main() {
                         
                             if((read(pipek[n-1][0],buffer,1))!=0){
                                 
+                                 if ( buffer[0] == '9'){
+                                 
+                                 
+                                 }
                                 printf("--%c--\n",buffer[0]);
                                 
                             }
