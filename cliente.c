@@ -74,12 +74,13 @@ char*   ficheiro ;
             while (i <= nivel2) {
                 write(n, p[i], sizeof (char)*strlen(p[i]));
                 write(n, ":", 1);
-                write(n,ficheiro,sizeof(ficheiro));
-                 write(n, ":", 1);
+              
                
 
                 i++;
             }
+            write(n,ficheiro,sizeof(ficheiro));
+            write(n, ":", 1);
             write(n, "9", 1);
 
 
