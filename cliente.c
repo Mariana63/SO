@@ -104,9 +104,9 @@ int main(int argc, char*argv[]) {
 
 
             write(1, "Digite o valor a incrementar:\n", 30);
-            read(0, buffer, 10);
-            int valor = atoi(&buffer[0]);
-            char valor2 = buffer[0];
+            read(0, buffer, 30);
+            buffer[strlen(buffer)-1]='\0';
+            char* valor = strdup(buffer); memset(buffer, 0, 50);
         
            
             
@@ -115,11 +115,11 @@ int main(int argc, char*argv[]) {
             write(n,p[0],sizeof(char)*strlen(p[0]));
             write(n,":",1);
             write(n,"i:",2);
-            write(n,p[1],sizeof(char)*strlen(p[0]));
+            write(n,p[1],sizeof(char)*strlen(p[1]));
             write(n,":",1);
-            write(n,p[2],sizeof(char)*strlen(p[0]));
+            write(n,p[2],sizeof(char)*strlen(p[2]));
             write(n,":",1);
-            write(n,&valor2,1);
+            write(n,valor,sizeof(char)*strlen(valor));
             write(n,":",1);
             write(n, "9", 1);
     }

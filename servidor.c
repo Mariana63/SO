@@ -19,8 +19,10 @@ int fAct(char*s) {
     }
 return f;
 }
+
+
 //d:a:nivel(:c:f):9
-void agregar(int g, int li, char* distrito){
+void parseA(int g, int li, char* distrito){
     int fl2 = 0;
     char buffer[50];
     int nivel=-1;
@@ -30,15 +32,7 @@ void agregar(int g, int li, char* distrito){
 
             if (buffer[0]=='0' || buffer[0]=='1' || buffer[0]=='2'){
                 nivel = buffer[0];
-
-
-
-
             }
-
-            
-
-
             else if (buffer[0] == '9'){
                 write(pipek[g][1], "FIM", 3); fl2=1;
             }
@@ -48,28 +42,22 @@ void agregar(int g, int li, char* distrito){
 }
 
 
-//li == :valor:c:f:9
-void incrementar(int g, int li, char* distrito){
+//li == :c:f:valor:9
+void parseI(int g, int li, char* distrito){
     int fl2 = 0, j=0;
-    char buffer[50], valor[100], conc[15], freg[15];
+    char buffer[50]; memset(buffer, 0, 50);
+    char valor[100]; memset(valor, 0, 100);
+    char conc[15]; memset(conc, 0, 15);
+    char freg[15]; memset(freg, 0, 15);
+    char lixo[3];
     write(pipek[g][1], "I", 1);
 
 
         while ((read(li, buffer, 1)) != 0 && (!fl2)){
 
+            //if(buffer[0]==':') buffer[0]='*';
 
-            while (buffer[0]>='0' || buffer[0]<='9'){
-                memset(valor, 0, 100);
-                read(li, buffer, 1);
-                valor[j] = buffer[0]; j++;
-            }
-            valor[j-1] = '\0';
-            write(pipek[g][1], valor, strlen(valor));
-
-
-            //tirar :
-            if(buffer[0]==':') read(li, buffer, 1);
-
+            //CONCELHO
             while (buffer[0]!=':'){
                 j=0;
                 memset(conc, 0, 15);
@@ -79,10 +67,9 @@ void incrementar(int g, int li, char* distrito){
             conc[j-1] = '\0';
             write(pipek[g][1], conc, strlen(conc));
 
+            //TIRAR :
 
-            //tirar :
-            if(buffer[0]==':') read(li, buffer, 1);
-
+            //FREGUESIA
             while (buffer[0]!=':'){
                 j=0;
                 memset(freg, 0, 15);
@@ -92,14 +79,26 @@ void incrementar(int g, int li, char* distrito){
             freg[j-1] = '\0';
             write(pipek[g][1], freg, strlen(freg));
 
-            
+            //TIRAR :
+
+            //VALOR
+            while (buffer[0]!=':'){
+                j=0;
+                memset(valor, 0, 15);
+                read(li, buffer, 1);
+                valor[j] = buffer[0]; j++;
+            }
+            valor[j-1] = '\0';
+            write(pipek[g][1], valor, strlen(valor));
+
+
 
             if (buffer[0] == '9'){
                 write(pipek[g][1], "FIM", 3); fl2=1;
             }
-
-            else write(pipek[g][1], (&buffer[0]), 1);
         }
+
+    //incrementar();
 }
 
 
@@ -113,9 +112,9 @@ void existe(int g, int li, char* distrito){
         write(pipek[g][1], ":", sizeof (char));
         while ((read(li, buffer, 1)) != 0 && (!fl2)){
 
-            if (buffer[0]=='a') agregar(g, li, distrito);
+            if (buffer[0]=='a') parseA(g, li, distrito);
             
-            else if (buffer[0]=='i') incrementar(g, li, distrito);
+            else if (buffer[0]=='i') parseI(g, li, distrito);
 
             else if (buffer[0] == '9'){
                 write(pipek[g][1], "FIM", 3); fl2=1;
