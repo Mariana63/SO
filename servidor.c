@@ -20,49 +20,56 @@ int fAct(char*s) {
 return f;
 }
 
-int incrementar(char* nome[], unsigned  valor, int g){
+int incrementar(char* nome[], unsigned  valor){
     //fazer
-
+    printf("OLA EU VOU INCREMENTAR %s-%d-\n",nome[0],valor);
     return 1;
 }
 
 
-int agregar(char* prefixo[], unsigned nivel, char* path, int g){
+int agregar(char* prefixo[], unsigned nivel, char* path){
     //fazer
-
+  printf("OLA EU VOU AGREGAR %s-%d-%s\n",prefixo[0],nivel,path);
     return 1;
 }
 
 //li = :nivel(:c:f):ficheiro:9
-void parseA(int g, int li, char* distrito){
+void parseA(int g, char* distrito){
     int fl2 = 0, j=0;
     char nivel;
-    int nn;
+    unsigned nn;
     char buffer[50]; memset(buffer, 0, 50);
     char conc[15]; memset(conc, 0, 15);
     char freg[15]; memset(freg, 0, 15);
     char fic[15]; memset(fic, 0, 15);
     int n=0;
-
-
-        if ((read(li, buffer, 1)) != 0 && (!fl2)){
+ printf("-dois\n");
+printf("-dois\n");
+printf("-dois\n");
+   if((     read(pipek[g][1], buffer, 1))!=0){ 
             //NIVEL
             if(n==0){
-                if(buffer[0]==':') read(li, buffer, 1);
+                printf("-UM\n");
+                if(buffer[0]==':') read(pipek[g][1], buffer, 1);
                 nivel = buffer[0];
                 write(pipek[g][1], &nivel, 1);
                 n=1; j=0;
-                read(li, buffer, 1);
-            }
-            nn = atoi(&nivel);
+                read(pipek[g][1], buffer, 1);
             
+     nn = nivel -'0'; 
+     
+     printf("zero\n");
+            if(nn>=1){
+                printf("UM\n");
                 //CONCELHO
-                if(n==1){
-                    if(buffer[0]==':') read(li, buffer, 1);
-                    conc[j] = buffer[0]; j++;
+                if(n==1){ printf("dois\n");
+                    if(buffer[0]==':') 
+                  read(pipek[g][1], buffer, 1);
+                    conc[j] = buffer[0];
+                    j++;
 
                     while (buffer[0]!=':'){
-                        read(li, buffer, 1);
+                        read(pipek[g][1], buffer, 1);
                         conc[j] = buffer[0];
                         j++;
                     }
@@ -72,31 +79,34 @@ void parseA(int g, int li, char* distrito){
                     n=2; j=0;
                 }
 
-                
+              
                  //FREGUESIA
-                if(n==2){
-                    if(buffer[0]==':') read(li, buffer, 1);
+                if(n==2 && nn == 2){
+                     printf("tres\n");
+                    if(buffer[0]==':')
+                   read(pipek[g][1], buffer, 1);
                     freg[j] = buffer[0]; j++;
 
                     while (buffer[0]!=':'){
-                        read(li, buffer, 1);
+                        read(pipek[g][1], buffer, 1);
                         freg[j] = buffer[0];
                         j++;
                     }
 
                     freg[j-1] = '\0';
+                    
                     write(pipek[g][1], freg, strlen(freg));
                     n=3; j=0;
-                }
+                }else{n = 3;}
             
-
+            }else{n = 3;}
             //FICHEIRO
-            if(n==3){
-                if(buffer[0]==':') read(li, buffer, 1);
+            if(n==3){ printf("quatro\n");
+                if(buffer[0]==':') read(pipek[g][1], buffer, 1);
                 fic[j] = buffer[0]; j++;
 
                 while (buffer[0]!=':'){
-                    read(li, buffer, 1);
+                    read(pipek[g][1], buffer, 1);
                     fic[j] = buffer[0];
                     j++;
                 }
@@ -107,16 +117,18 @@ void parseA(int g, int li, char* distrito){
             }
 
         }
+     printf("fim\n");
     char* nome[3];
     nome[0]=strdup(distrito);
     nome[1]=strdup(conc);
     nome[2]=strdup(freg);
+     read(pipek[g][1], buffer, 1);
+     printf("%c++++\n",buffer[0]);
+    agregar(nome,nn,fic);
+   }else printf("Adeus\n");}
 
-    agregar(nome,nn,fic, g);
-}
 
-
-//li == :c:f:valor:9
+//li == :c:f:valor:#
 void parseI(int g, int li, char* distrito){
     int fl2 = 0, j=0;
     char buffer[50]; memset(buffer, 0, 50);
@@ -180,7 +192,7 @@ void parseI(int g, int li, char* distrito){
     nome[1]=strdup(conc);
     nome[2]=strdup(freg);
     unsigned valor2 = atoi(valor);
-    incrementar(nome, valor2, g);
+    incrementar(nome, valor2);
 }
 
 
@@ -190,7 +202,7 @@ void existe(int g, int li, char* distrito){
     char buffer[50];
         
         while ((read(li, buffer, 1)) != 0 && !fl) {
-            if (buffer[0]=='9') {
+            if (buffer[0]=='#') {
                 write(pipek[g][1], (&buffer[0]), 1); 
                 fl = 1;
             }
@@ -200,7 +212,7 @@ void existe(int g, int li, char* distrito){
 
 
 
-void naoExiste(int g, int li, char* distrito){
+void naoExiste( int li, char* distrito){
     char buffer[15];
     dist[n] = strdup(distrito);
     printf("distrito NOVO:%s\n",dist[n]);
@@ -214,9 +226,16 @@ void naoExiste(int g, int li, char* distrito){
         
             while(1){
                 if((read(pipek[n-1][0],buffer,1))!=0){
-                    if (buffer[0]=='a') {parseA(g, li, distrito);}
-                    else if (buffer[0]=='i') {parseI(g, li, distrito);}
-                    printf("--%c--\n",buffer[0]);   
+                    printf("--%c--\n",buffer[0]); 
+                    if (buffer[0]=='a') {
+                        
+                        
+                       parseA(n-1, distrito);
+                    }
+                    else if (buffer[0]=='i') {//parseI(n-1, distrito);
+                         printf("as7d6yags\n");
+                    }
+                      
                 }
             }
     }
@@ -225,7 +244,7 @@ void naoExiste(int g, int li, char* distrito){
         close(pipek[n-1][0]);
         int fl = 0;
         while ((read(li, buffer, 1)) != 0&& !fl) {
-            if (buffer[0]=='9') {
+            if (buffer[0]=='#') {
                 write(pipek[n - 1][1], (&buffer[0]), 1);
                 fl = 1;
             }
@@ -260,7 +279,7 @@ int main() {
                
                 int g = fAct(pref);
                 if (g != -1) existe(g, li, pref);
-                else naoExiste(g, li, pref);
+                else naoExiste( li, pref);
         }
     }
 

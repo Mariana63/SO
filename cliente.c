@@ -65,13 +65,13 @@ int main(int argc, char*argv[]) {
             
             while (i <= nivel) {
                 write(n, p[i],sizeof(char)*strlen(p[i]));
-                write(n, ":", 1);
+                write(n, "#", 1);
                 i++;
             }
             ficheiro[strlen(ficheiro)-1] = '\0';
             write(n,ficheiro,sizeof(char)*strlen(ficheiro));
-            write(n, ":", 1);
-            write(n, "9", 1);
+            
+            write(n, "#", 1);
         }
     
 
@@ -121,7 +121,7 @@ int main(int argc, char*argv[]) {
             write(n,":",1);
             write(n,valor,sizeof(char)*strlen(valor));
             write(n,":",1);
-            write(n, "9", 1);
+            write(n, "#", 1);
     }
     
 
