@@ -65,7 +65,7 @@ int main(int argc, char*argv[]) {
             
             while (i <= nivel) {
                 write(n, p[i],sizeof(char)*strlen(p[i]));
-                write(n, "#", 1);
+                write(n, ":", 1);
                 i++;
             }
             ficheiro[strlen(ficheiro)-1] = '\0';
@@ -120,7 +120,7 @@ int main(int argc, char*argv[]) {
             write(n,p[2],sizeof(char)*strlen(p[2]));
             write(n,":",1);
             write(n,valor,sizeof(char)*strlen(valor));
-            write(n,":",1);
+           
             write(n, "#", 1);
     }
     

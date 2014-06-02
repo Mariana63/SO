@@ -5,11 +5,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-
+#include "struct.h"
 char*dist[32];
 int pipek[32][2];
 int n;
+Registo *loc;
 
+void novoReg() {
+    loc = (Registo*) malloc(sizeof (Registo));
+    loc->root = NULL;
+
+
+}
 int fAct(char*s) {
     int i=0, f=-1;
     while (i<n && f==-1) {
@@ -19,10 +26,42 @@ int fAct(char*s) {
     }
 return f;
 }
+void printEstruturas() {
 
+    Distrito *a = loc->root;
+    while (a != NULL) {
+        printf("Distrito:%s: \n", a->d);
+        Concelho *b = a->c;
+        while (b != NULL) {
+            printf("concelho : %s:\n", b->concelho);
+            Freguesia *c = b->f;
+
+            while (c != NULL) {
+                printf("freg : %s", c->freguesia);
+                c = c->next;
+            }
+            b = b->next;
+        }
+
+
+        a = a->next;
+    }
+
+
+}
 int incrementar(char* nome[], unsigned  valor){
     //fazer
+    //open("",);
     printf("OLA EU VOU INCREMENTAR %s-%d-\n",nome[0],valor);
+   /* Distrito *a = loc->root;
+    while (a != NULL) {
+     if (!(strcmp(a->d, nome[0]))){}
+    
+    
+    
+    
+    }*/
+    
     return 1;
 }
 
@@ -35,7 +74,7 @@ int agregar(char* prefixo[], unsigned nivel, char* path){
 
 //li = :nivel(:c:f):ficheiro:9
 void parseA(int g, char* distrito){
-    int fl2 = 0, j=0;
+    int j=0;
     char nivel;
     unsigned nn;
     char buffer[50]; memset(buffer, 0, 50);
@@ -43,80 +82,83 @@ void parseA(int g, char* distrito){
     char freg[15]; memset(freg, 0, 15);
     char fic[15]; memset(fic, 0, 15);
     int n=0;
- printf("-dois\n");
-printf("-dois\n");
-printf("-dois\n");
-   if((     read(pipek[g][1], buffer, 1))!=0){ 
+
+  if((     read(pipek[g][1], buffer, 1))!=0){   
             //NIVEL
-            if(n==0){
-                printf("-UM\n");
-                if(buffer[0]==':') read(pipek[g][1], buffer, 1);
+             
+                
+                read(pipek[g][0], buffer, 1);
+                 printf("-nivel-%c--\n",buffer[0]); 
                 nivel = buffer[0];
-                write(pipek[g][1], &nivel, 1);
+                
                 n=1; j=0;
-                read(pipek[g][1], buffer, 1);
+                read(pipek[g][0], buffer, 1);
             
      nn = nivel -'0'; 
      
-     printf("zero\n");
+   
             if(nn>=1){
-                printf("UM\n");
+               
                 //CONCELHO
-                if(n==1){ printf("dois\n");
-                    if(buffer[0]==':') 
-                  read(pipek[g][1], buffer, 1);
+                if(n==1){ 
+                
+                
+                    if(buffer[0]==':') {
+                  read(pipek[g][0], buffer, 1);  printf("-nivel3-%c--\n",buffer[0]);  }
                     conc[j] = buffer[0];
                     j++;
 
                     while (buffer[0]!=':'){
-                        read(pipek[g][1], buffer, 1);
+                        read(pipek[g][0], buffer, 1); 
+                         printf("-nivel4-%c--\n",buffer[0]); 
+                        
                         conc[j] = buffer[0];
                         j++;
                     }
 
-                    conc[j-1] = '\0';
-                    write(pipek[g][1], conc, strlen(conc));
+                   conc[j-1] = '\0';
+                   
                     n=2; j=0;
+                   
                 }
 
               
                  //FREGUESIA
                 if(n==2 && nn == 2){
-                     printf("tres\n");
+                    
                     if(buffer[0]==':')
-                   read(pipek[g][1], buffer, 1);
+                   read(pipek[g][0], buffer, 1);
                     freg[j] = buffer[0]; j++;
 
                     while (buffer[0]!=':'){
-                        read(pipek[g][1], buffer, 1);
+                        read(pipek[g][0], buffer, 1);
                         freg[j] = buffer[0];
                         j++;
                     }
 
                     freg[j-1] = '\0';
                     
-                    write(pipek[g][1], freg, strlen(freg));
                     n=3; j=0;
                 }else{n = 3;}
             
             }else{n = 3;}
             //FICHEIRO
             if(n==3){ printf("quatro\n");
-                if(buffer[0]==':') read(pipek[g][1], buffer, 1);
+                if(buffer[0]==':') read(pipek[g][0], buffer, 1);
                 fic[j] = buffer[0]; j++;
 
-                while (buffer[0]!=':'){
-                    read(pipek[g][1], buffer, 1);
+                while (buffer[0]!='#'){
+                    read(pipek[g][0], buffer, 1);
                     fic[j] = buffer[0];
                     j++;
                 }
 
                 fic[j-1] = '\0';
-                write(pipek[g][1], fic, strlen(fic));
+               
                 n=4; j=0;
             }
 
-        }
+        
      printf("fim\n");
     char* nome[3];
     nome[0]=strdup(distrito);
@@ -125,74 +167,96 @@ printf("-dois\n");
      read(pipek[g][1], buffer, 1);
      printf("%c++++\n",buffer[0]);
     agregar(nome,nn,fic);
-   }else printf("Adeus\n");}
+   }else printf("Adeus\n");
+   
+   
+   }
 
 
 //li == :c:f:valor:#
-void parseI(int g, int li, char* distrito){
-    int fl2 = 0, j=0;
+void parseI(int g,  char* distrito){
+    int j=0;
+    char nivel;
+    
     char buffer[50]; memset(buffer, 0, 50);
-    char valor[100]; memset(valor, 0, 100);
     char conc[15]; memset(conc, 0, 15);
     char freg[15]; memset(freg, 0, 15);
+    char fic[15]; memset(fic, 0, 15);
     int n=0;
 
-
-        if ((read(li, buffer, 1)) != 0 && (!fl2)){
-            //CONCELHO
-            if(n==0){
-                if(buffer[0]==':') read(li, buffer, 1);
-                conc[j] = buffer[0]; j++;
-
-                while (buffer[0]!=':'){
-                    read(li, buffer, 1);
+  if((     read(pipek[g][1], buffer, 1))!=0){   
+            //NIVEL
+       
+                
+                
+                    if(buffer[0]==':') {
+                  read(pipek[g][0], buffer, 1);  printf("-nivel3-%c--\n",buffer[0]);  }
                     conc[j] = buffer[0];
                     j++;
+
+                    while (buffer[0]!=':'){
+                        read(pipek[g][0], buffer, 1); 
+                         printf("-nivel4-%c--\n",buffer[0]); 
+                        
+                        conc[j] = buffer[0];
+                        j++;
+                    }
+
+                    conc[j-1] = '\0';
+                   
+                    n=2; j=0;
+                   
                 }
 
-                conc[j-1] = '\0';
-                write(pipek[g][1], conc, strlen(conc));
-                n=1; j=0;
-            }
+              
+                 //FREGUESIA
+               
+                    
+                    if(buffer[0]==':')
+                   read(pipek[g][0], buffer, 1);
+                    freg[j] = buffer[0]; j++;
 
-            //FREGUESIA
-            if(n==1){
-                if(buffer[0]==':') read(li, buffer, 1);
-                freg[j] = buffer[0]; j++;
+                    while (buffer[0]!=':'){
+                        read(pipek[g][0], buffer, 1);
+                        freg[j] = buffer[0];
+                        j++;
+                    }
 
-                while (buffer[0]!=':'){
-                    read(li, buffer, 1);
-                    freg[j] = buffer[0];
+                    freg[j-1] = '\0';
+                    
+                    n=3; j=0;
+                
+            
+           
+             printf("quatro\n");
+                if(buffer[0]==':') read(pipek[g][0], buffer, 1);
+                fic[j] = buffer[0]; j++;
+
+                while (buffer[0]!='#'){
+                    read(pipek[g][0], buffer, 1);
+                    fic[j] = buffer[0];
                     j++;
                 }
 
-                freg[j-1] = '\0';
-                write(pipek[g][1], freg, strlen(freg));
-                n=2; j=0;
-            }
+                fic[j-1] = '\0';
+               
+                n=atoi(fic);
+            
 
-            //VALOR
-             if(n==2){
-                if(buffer[0]==':') read(li, buffer, 1);
-                valor[j] = buffer[0]; j++;
-
-                while (buffer[0]!=':'){
-                    read(li, buffer, 1);
-                    valor[j] = buffer[0];
-                    j++;
-                }
-
-                valor[j-1] = '\0';
-                write(pipek[g][1], valor, strlen(valor));
-                n=2; j=0;
-            }
-        }
+        
+     printf("fim\n");
     char* nome[3];
     nome[0]=strdup(distrito);
     nome[1]=strdup(conc);
     nome[2]=strdup(freg);
-    unsigned valor2 = atoi(valor);
-    incrementar(nome, valor2);
+     read(pipek[g][1], buffer, 1);
+     printf("%c++++\n",buffer[0]);
+   
+
+   
+   
+   
+    incrementar(nome, n);
 }
 
 
@@ -225,15 +289,16 @@ void naoExiste( int li, char* distrito){
         close(pipek[n-1][1]);
         
             while(1){
-                if((read(pipek[n-1][0],buffer,1))!=0){
+                if((read(pipek[n-1][0],buffer,2))!=0){
                     printf("--%c--\n",buffer[0]); 
                     if (buffer[0]=='a') {
                         
                         
                        parseA(n-1, distrito);
+                  
                     }
-                    else if (buffer[0]=='i') {//parseI(n-1, distrito);
-                         printf("as7d6yags\n");
+                    else if (buffer[0]=='i') {parseI(n-1, distrito);
+                         
                     }
                       
                 }
@@ -260,7 +325,7 @@ void naoExiste( int li, char* distrito){
 int main() {
     char buffer[50], pref[15];
     int j=0, i = 0, f = 0, r, nivel; n = 0;
-
+    novoReg();
     mkfifo("/tmp/Serv", 0666);
     int li = open("/tmp/Serv", O_RDONLY);
 
