@@ -147,7 +147,7 @@ void save(char *nome[],char*path,int lvl){
  memset(&l,0,50);
  strcat(l,path) ;
  strcat(l,".txt"); 
-int e = open(l,O_WRONLY |  O_CREAT|O_APPEND,0666);
+int e = open(l,O_WRONLY |  O_CREAT|O_TRUNC,0666);
      while (a != NULL && !f1) {
      if (!(strcmp(a->d, nome[0]))){
         
@@ -171,12 +171,12 @@ int e = open(l,O_WRONLY |  O_CREAT|O_APPEND,0666);
                  memset(&novo,0,50);
               
                   casos = c->casos ;
-                 snprintf ( novo, 50, "%s:%s:%s:%d\n",nome[0], nome[1],nome[2],casos );
+                 snprintf ( novo, 50, "%s:%s:%s:%d",nome[0], nome[1],nome[2],casos );
             
             
           
                write(e,novo,strlen(novo)*sizeof(char));  
-                    
+                  write(e,"\n",1);   
                   }else
                   c= c->next;
              } 
@@ -185,11 +185,12 @@ int e = open(l,O_WRONLY |  O_CREAT|O_APPEND,0666);
                  memset(&novo,0,50);
               
               casos = b->casos ;
-                 snprintf ( novo, 50, "%s:%s:default:%d\n",nome[0], nome[1],casos );
+                 snprintf ( novo, 50, "%s:%s:default:%d",nome[0], nome[1],casos );
            
             
           
-               write(e,novo,strlen(novo)*sizeof(char));  
+               write(e,novo,strlen(novo)*sizeof(char)); 
+                write(e,"\n",1);  
              }
          }else
              
@@ -215,8 +216,9 @@ Concelho *b = a->c;
                  memset(&novo,0,50);
               
                   casos = c->casos ;
-                 snprintf ( novo, 50, "%s:%s:%s:%d\n",a->d,b->concelho,c->freguesia,casos );
-             write(e,novo,strlen(novo)*sizeof(char));  
+                 snprintf ( novo, 50, "%s:%s:%s:%d",a->d,b->concelho,c->freguesia,casos );
+             write(e,novo,strlen(novo)*sizeof(char)); 
+              write(e,"\n",1);  
              c=c->next;
                  }
           
@@ -237,11 +239,12 @@ Concelho *b = a->c;
                  strcat(novo,nome[0]);
        
           casos = a->casos ;
-                 snprintf ( novo, 50, "%s:default:default:%d\n",nome[0],casos );
+                 snprintf ( novo, 50, "%s:default:default:%d",nome[0],casos );
           
             
           
                write(e,novo,strlen(novo)*sizeof(char));  
+                write(e,"\n",1);  
     }
      }else  a = a->next;
 
