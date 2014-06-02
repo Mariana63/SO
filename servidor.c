@@ -147,7 +147,7 @@ void save(char *nome[],char*path,int lvl){
  memset(&l,0,50);
  strcat(l,path) ;
  strcat(l,".txt"); 
-int e = open(l,O_WRONLY |  O_CREAT|O_TRUNC,0666);
+int e = open(l,O_WRONLY |  O_CREAT|O_APPEND,0666);
      while (a != NULL && !f1) {
      if (!(strcmp(a->d, nome[0]))){
         
