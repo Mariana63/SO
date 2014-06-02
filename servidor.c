@@ -26,6 +26,171 @@ int fAct(char*s) {
     }
 return f;
 }
+
+
+void inserir(char *nome[],int val){
+    int f1 =0,f2=0,f3=0;
+    Distrito *d = (Distrito*) malloc(sizeof (Distrito));
+ Distrito *a = loc->root;
+    while (a != NULL && !f1) {
+     if (!(strcmp(a->d, nome[0]))){
+         a->casos += val;
+         f1  = 1;
+      Concelho *b = a->c;
+     while (b != NULL && !f2) {
+         if (!(strcmp(b->concelho, nome[1]))){
+             b->casos+=val;
+             f2 =1;
+             Freguesia *c = b->f;
+             while(c!=NULL && !f3){
+                  if (!(strcmp(c->freguesia , nome[2]))){
+                      f3 =1;
+                      c->casos+=val;
+                  }else
+                  c= c->next;
+             } if (c == NULL &&!f3) {
+                     
+                        Freguesia *nf = (Freguesia*) malloc(sizeof (Freguesia));
+                        nf->freguesia = strdup(nome[2]);
+
+                        nf->casos = val;
+                        nf->next = b->f;
+                        b->f = nf;
+
+
+                    }
+         
+         }else
+       b = b->next;  
+     }  if (b == NULL && !f2) {
+
+                Concelho *nc = (Concelho*) malloc(sizeof (Concelho));
+                
+                    Freguesia *nf = (Freguesia*) malloc(sizeof (Freguesia));
+                    nf->freguesia = strdup(nome[2]);
+                    nc->f = nf;
+                    nf->next = NULL;
+                    nf->casos = val;
+               
+
+                nc->casos = val;
+
+
+                nc->next = a->c;
+                a->c = nc;
+
+            }
+     
+     
+     
+     }else  a = a->next;
+    
+    
+    
+   
+    } if (a == NULL && !f1 ){ 
+       
+        d->d = strdup(nome[0]);
+        d->casos = val;
+
+
+        Concelho *nc = (Concelho*) malloc(sizeof (Concelho));
+        nc->concelho = strdup(nome[1]);
+        
+            Freguesia *nf = (Freguesia*) malloc(sizeof (Freguesia));
+            nf->freguesia = strdup(nome[2]);
+            nc->f = nf;
+            nf->next = NULL;
+            nf->casos = val;
+       
+        nc->casos = val;
+
+        nc->next = NULL;
+        d->c = nc;
+        d->next = loc->root;
+        loc->root = d;
+    } else free(d);
+
+
+}
+
+
+
+
+
+void save(char *nome[],char*path,int lvl){
+ int f1 =0,f2=0,f3=0;
+ Distrito *a = loc->root;char l[50];
+ char casos;
+ memset(&l,0,50);
+ strcat(l,path) ;
+ strcat(l,".txt"); 
+int e = open(l,O_WRONLY |  O_CREAT);
+     while (a != NULL && !f1) {
+     if (!(strcmp(a->d, nome[0]))){
+        
+         f1  = 1;
+    if(lvl>=1){  
+        
+        Concelho *b = a->c;
+     while (b != NULL && !f2) {
+         if (!(strcmp(b->concelho, nome[1]))){
+                
+                   
+             f2 =1;
+             
+             if(lvl==2){
+             Freguesia *c = b->f;
+             while(c!=NULL && !f3){
+                  if (!(strcmp(c->freguesia , nome[2]))){
+                      f3 =1;
+                      char novo[50];
+                 memset(&novo,0,50);
+                 strcat(novo,nome[0]);
+                 strcat(novo,":");
+                   strcat(novo,nome[1]);
+                   strcat(novo,":");
+                   strcat(novo,nome[2]);
+                   strcat(novo,":"); strcat(novo,&casos);
+            strcat(novo,"\n");
+               write(e,novo,strlen(novo)*sizeof(char));  
+                    
+                  }else
+                  c= c->next;
+             } 
+             }else{
+                 char novo[50];
+                 memset(&novo,0,50);
+                 strcat(novo,nome[0]);
+                 strcat(novo,":");
+                   strcat(novo,nome[1]);
+          strcat(novo,":default:");
+            strcat(novo,&casos);
+            strcat(novo,"\n");
+                write(e,novo,strlen(novo)*sizeof(char));}
+         }else
+             
+       b = b->next;  
+     } 
+     
+     
+    }else{
+         char novo[50];
+                 memset(&novo,0,50);
+                 strcat(novo,nome[0]);
+        strcat(novo,":default");
+          strcat(novo,":default:");
+            strcat(novo,&casos);
+            strcat(novo,"\n");
+        write(e,novo,strlen(novo)*sizeof(char));}
+     }else  a = a->next;
+
+
+
+     } 
+
+close(e);
+}
 void printEstruturas() {
 
     Distrito *a = loc->root;
@@ -53,15 +218,9 @@ int incrementar(char* nome[], unsigned  valor){
     //fazer
     //open("",);
     printf("OLA EU VOU INCREMENTAR %s-%d-\n",nome[0],valor);
-   /* Distrito *a = loc->root;
-    while (a != NULL) {
-     if (!(strcmp(a->d, nome[0]))){}
-    
-    
-    
-    
-    }*/
-    
+   
+    inserir(nome,valor);
+    save(nome,nome[0],2);
     return 1;
 }
 
@@ -69,6 +228,7 @@ int incrementar(char* nome[], unsigned  valor){
 int agregar(char* prefixo[], unsigned nivel, char* path){
     //fazer
   printf("OLA EU VOU AGREGAR %s-%d-%s\n",prefixo[0],nivel,path);
+  save(prefixo,path,nivel);
     return 1;
 }
 
