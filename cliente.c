@@ -10,7 +10,7 @@
 int main(int argc, char*argv[]) {
     char buffer[50];
     memset(buffer, 0, 50);
-    int n = open("/tmp/Serv", O_WRONLY); // n - descritor do ficheiro
+    int n = open("/tmp/Serv", O_WRONLY);
    
     
     write(1, "1- Agregar\n2-Incrementar\n", 25);

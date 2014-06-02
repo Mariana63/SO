@@ -1,8 +1,0 @@
-servidor: ->saber qual filho e que trata de cada distrito
- ->pipe com nome, de onde le as ordens dos clientes e poe o filho certo a trabalhar
- 
-
---serv : filho , acedo ao ficheiro do distrito x, e faz a opereçao
-
-
-cliente, mada ordens ao server pelo pipe
