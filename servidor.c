@@ -133,7 +133,7 @@ void inserir(char *nome[],int val){
         d->next = loc->root;
         loc->root = d;
     } else free(d);
- printEstruturas();
+ ///printEstruturas();
 
 }
 
