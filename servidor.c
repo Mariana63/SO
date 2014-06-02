@@ -125,11 +125,12 @@ void save(char *nome[],char*path,int lvl){
  memset(&l,0,50);
  strcat(l,path) ;
  strcat(l,".txt"); 
-int e = open(l,O_WRONLY |  O_CREAT|O_TRUNC);
+int e = open(l,O_WRONLY |  O_CREAT|O_TRUNC,0666);
      while (a != NULL && !f1) {
      if (!(strcmp(a->d, nome[0]))){
         
          f1  = 1;
+         printf("aquei e ele\n");
     if(lvl>=1){  
         
         Concelho *b = a->c;
@@ -349,13 +350,13 @@ void parseI(int g,  char* distrito){
                 
                 
                     if(buffer[0]==':') {
-                  read(pipek[g][0], buffer, 1);  printf("-nivel3-%c--\n",buffer[0]);  }
+                  read(pipek[g][0], buffer, 1);   }
                     conc[j] = buffer[0];
                     j++;
 
                     while (buffer[0]!=':'){
                         read(pipek[g][0], buffer, 1); 
-                         printf("-nivel4-%c--\n",buffer[0]); 
+                        
                         
                         conc[j] = buffer[0];
                         j++;
@@ -387,7 +388,7 @@ void parseI(int g,  char* distrito){
                 
             
            
-             printf("quatro\n");
+             
                 if(buffer[0]==':') read(pipek[g][0], buffer, 1);
                 fic[j] = buffer[0]; j++;
 
@@ -403,7 +404,7 @@ void parseI(int g,  char* distrito){
             
 
         
-     printf("fim\n");
+    
     char* nome[3];
     nome[0]=strdup(distrito);
     nome[1]=strdup(conc);
