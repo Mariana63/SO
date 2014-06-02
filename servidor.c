@@ -21,7 +21,7 @@ int fAct(char*s) {
     int i=0, f=-1;
     while (i<n && f==-1) {
         if ((strcmp(dist[i], s)) == 0) {
-            printf("AKI D\n"); f=i;}
+        f=i;}
         else i++;
     }
 return f;
@@ -52,6 +52,7 @@ void printEstruturas() {
 
 void inserir(char *nome[],int val){
     int f1 =0,f2=0,f3=0;
+    
     Distrito *d = (Distrito*) malloc(sizeof (Distrito));
  Distrito *a = loc->root;
     while (a != NULL && !f1) {
@@ -87,7 +88,7 @@ void inserir(char *nome[],int val){
      }  if (b == NULL && !f2) {
 
                 Concelho *nc = (Concelho*) malloc(sizeof (Concelho));
-                
+                nc->concelho = strdup(nome[1]);
                     Freguesia *nf = (Freguesia*) malloc(sizeof (Freguesia));
                     nf->freguesia = strdup(nome[2]);
                     nc->f = nf;
@@ -132,7 +133,7 @@ void inserir(char *nome[],int val){
         d->next = loc->root;
         loc->root = d;
     } else free(d);
- 
+ printEstruturas();
 
 }
 
