@@ -197,6 +197,40 @@ int e = open(l,O_WRONLY |  O_CREAT|O_APPEND,0666);
      } 
      
      
+    }else if(lvl == -1){
+        char novo[50];
+    
+Concelho *b = a->c;
+     while (b != NULL ) {
+        
+                
+                   
+            
+             
+           
+             Freguesia *c = b->f;
+             while(c!=NULL && !f3){
+                 
+                 
+                 memset(&novo,0,50);
+              
+                  casos = c->casos ;
+                 snprintf ( novo, 50, "%s:%s:%s:%d\n",a->d,b->concelho,c->freguesia,casos );
+             write(e,novo,strlen(novo)*sizeof(char));  
+             c=c->next;
+                 }
+          
+              
+                    
+               b = b->next;  
+             } 
+             
+     
+        
+        
+    
+    
+    
     }else{
          char novo[50];
                  memset(&novo,0,50);
@@ -223,7 +257,7 @@ int incrementar(char* nome[], unsigned  valor){
     printf("VOU INCREMENTAR a %s-%d-\n",nome[0],valor);
    
     inserir(nome,valor);
-    save(nome,nome[0],2);
+    save(nome,nome[0],-1);
     return 1;
 }
 
