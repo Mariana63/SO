@@ -215,9 +215,8 @@ void printEstruturas() {
 
 }
 int incrementar(char* nome[], unsigned  valor){
-    //fazer
-    //open("",);
-    printf("OLA EU VOU INCREMENTAR %s-%d-\n",nome[0],valor);
+  
+    printf("VOU INCREMENTAR %s-%d-\n",nome[0],valor);
    
     inserir(nome,valor);
     save(nome,nome[0],2);
@@ -227,7 +226,7 @@ int incrementar(char* nome[], unsigned  valor){
 
 int agregar(char* prefixo[], unsigned nivel, char* path){
     //fazer
-  printf("OLA EU VOU AGREGAR %s-%d-%s\n",prefixo[0],nivel,path);
+  printf("VOU AGREGAR %s-%d-%s\n",prefixo[0],nivel,path);
   save(prefixo,path,nivel);
     return 1;
 }
@@ -248,7 +247,7 @@ void parseA(int g, char* distrito){
              
                 
                 read(pipek[g][0], buffer, 1);
-                 printf("-nivel-%c--\n",buffer[0]); 
+                
                 nivel = buffer[0];
                 
                 n=1; j=0;
@@ -264,13 +263,13 @@ void parseA(int g, char* distrito){
                 
                 
                     if(buffer[0]==':') {
-                  read(pipek[g][0], buffer, 1);  printf("-nivel3-%c--\n",buffer[0]);  }
+                  read(pipek[g][0], buffer, 1);   }
                     conc[j] = buffer[0];
                     j++;
 
                     while (buffer[0]!=':'){
                         read(pipek[g][0], buffer, 1); 
-                         printf("-nivel4-%c--\n",buffer[0]); 
+                         
                         
                         conc[j] = buffer[0];
                         j++;
@@ -303,7 +302,7 @@ void parseA(int g, char* distrito){
             
             }else{n = 3;}
             //FICHEIRO
-            if(n==3){ printf("quatro\n");
+            if(n==3){ 
                 if(buffer[0]==':') read(pipek[g][0], buffer, 1);
                 fic[j] = buffer[0]; j++;
 
@@ -319,13 +318,13 @@ void parseA(int g, char* distrito){
             }
 
         
-     printf("fim\n");
+     
     char* nome[3];
     nome[0]=strdup(distrito);
     nome[1]=strdup(conc);
     nome[2]=strdup(freg);
      read(pipek[g][1], buffer, 1);
-     printf("%c++++\n",buffer[0]);
+    
     agregar(nome,nn,fic);
    }else printf("Adeus\n");
    
