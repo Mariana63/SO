@@ -184,14 +184,18 @@ int e = open(l,O_WRONLY |  O_CREAT|O_TRUNC,0666);
              }else{
                  char novo[50];
                  memset(&novo,0,50);
+              Freguesia *c = b->f;
+             while(c!=NULL && !f3){
+                 
+                 
+                 memset(&novo,0,50);
               
-              casos = b->casos ;
-                 snprintf ( novo, 50, "%s:%s:default:%d",nome[0], nome[1],casos );
-           
-            
-          
-               write(e,novo,strlen(novo)*sizeof(char)); 
-                write(e,"\n",1);  
+                  casos = c->casos ;
+                 snprintf ( novo, 50, "%s:%s:%s:%d",a->d,b->concelho,c->freguesia,casos );
+             write(e,novo,strlen(novo)*sizeof(char)); 
+              write(e,"\n",1);  
+             c=c->next;
+                 }  
              }
          }else
              
@@ -199,7 +203,7 @@ int e = open(l,O_WRONLY |  O_CREAT|O_TRUNC,0666);
      } 
      
      
-    }else if(lvl == -1){
+    }else {
         char novo[50];
     
 Concelho *b = a->c;
@@ -234,18 +238,6 @@ Concelho *b = a->c;
     
     
     
-    }else{
-         char novo[50];
-                 memset(&novo,0,50);
-                 strcat(novo,nome[0]);
-       
-          casos = a->casos ;
-                 snprintf ( novo, 50, "%s:default:default:%d",nome[0],casos );
-          
-            
-          
-               write(e,novo,strlen(novo)*sizeof(char));  
-                write(e,"\n",1);  
     }
      }else  a = a->next;
 
