@@ -26,7 +26,29 @@ int fAct(char*s) {
     }
 return f;
 }
+void printEstruturas() {
 
+    Distrito *a = loc->root;
+    while (a != NULL) {
+        printf("Distrito:%s: \n", a->d);
+        Concelho *b = a->c;
+        while (b != NULL) {
+            printf("concelho : %s:\n", b->concelho);
+            Freguesia *c = b->f;
+
+            while (c != NULL) {
+                printf("freg : %s", c->freguesia);
+                c = c->next;
+            }
+            b = b->next;
+        }
+
+
+        a = a->next;
+    }
+
+
+}
 
 void inserir(char *nome[],int val){
     int f1 =0,f2=0,f3=0;
@@ -110,7 +132,7 @@ void inserir(char *nome[],int val){
         d->next = loc->root;
         loc->root = d;
     } else free(d);
-
+ 
 
 }
 
@@ -130,7 +152,7 @@ int e = open(l,O_WRONLY |  O_CREAT|O_TRUNC,0666);
      if (!(strcmp(a->d, nome[0]))){
         
          f1  = 1;
-         printf("aquei e ele\n");
+         
     if(lvl>=1){  
         
         Concelho *b = a->c;
@@ -147,13 +169,12 @@ int e = open(l,O_WRONLY |  O_CREAT|O_TRUNC,0666);
                       f3 =1;
                       char novo[50];
                  memset(&novo,0,50);
-                 strcat(novo,nome[0]);
-                 strcat(novo,":");
-                   strcat(novo,nome[1]);
-                   strcat(novo,":");
-                   strcat(novo,nome[2]);
-                   strcat(novo,":"); strcat(novo,&casos);
-            strcat(novo,"\n");
+              
+                  casos = c->casos ;
+                 snprintf ( novo, 50, "%s:%s:%s:%d\n",nome[0], nome[1],nome[2],casos );
+            
+            
+          
                write(e,novo,strlen(novo)*sizeof(char));  
                     
                   }else
@@ -162,13 +183,14 @@ int e = open(l,O_WRONLY |  O_CREAT|O_TRUNC,0666);
              }else{
                  char novo[50];
                  memset(&novo,0,50);
-                 strcat(novo,nome[0]);
-                 strcat(novo,":");
-                   strcat(novo,nome[1]);
-          strcat(novo,":default:");
-            strcat(novo,&casos);
-            strcat(novo,"\n");
-                write(e,novo,strlen(novo)*sizeof(char));}
+              
+              casos = b->casos ;
+                 snprintf ( novo, 50, "%s:%s:default:%d\n",nome[0], nome[1],casos );
+           
+            
+          
+               write(e,novo,strlen(novo)*sizeof(char));  
+             }
          }else
              
        b = b->next;  
@@ -179,11 +201,14 @@ int e = open(l,O_WRONLY |  O_CREAT|O_TRUNC,0666);
          char novo[50];
                  memset(&novo,0,50);
                  strcat(novo,nome[0]);
-        strcat(novo,":default");
-          strcat(novo,":default:");
-            strcat(novo,&casos);
-            strcat(novo,"\n");
-        write(e,novo,strlen(novo)*sizeof(char));}
+       
+          casos = a->casos ;
+                 snprintf ( novo, 50, "%s:default:default:%d\n",nome[0],casos );
+          
+            
+          
+               write(e,novo,strlen(novo)*sizeof(char));  
+    }
      }else  a = a->next;
 
 
@@ -192,32 +217,10 @@ int e = open(l,O_WRONLY |  O_CREAT|O_TRUNC,0666);
 
 close(e);
 }
-void printEstruturas() {
 
-    Distrito *a = loc->root;
-    while (a != NULL) {
-        printf("Distrito:%s: \n", a->d);
-        Concelho *b = a->c;
-        while (b != NULL) {
-            printf("concelho : %s:\n", b->concelho);
-            Freguesia *c = b->f;
-
-            while (c != NULL) {
-                printf("freg : %s", c->freguesia);
-                c = c->next;
-            }
-            b = b->next;
-        }
-
-
-        a = a->next;
-    }
-
-
-}
 int incrementar(char* nome[], unsigned  valor){
   
-    printf("VOU INCREMENTAR %s-%d-\n",nome[0],valor);
+    printf("VOU INCREMENTAR a %s-%d-\n",nome[0],valor);
    
     inserir(nome,valor);
     save(nome,nome[0],2);
@@ -227,7 +230,8 @@ int incrementar(char* nome[], unsigned  valor){
 
 int agregar(char* prefixo[], unsigned nivel, char* path){
     //fazer
-  printf("VOU AGREGAR %s-%d-%s\n",prefixo[0],nivel,path);
+  printf("VOU AGREGAR  a%s-%d-%s\n",prefixo[0],nivel,path);
+  
   save(prefixo,path,nivel);
     return 1;
 }
@@ -243,11 +247,11 @@ void parseA(int g, char* distrito){
     char fic[15]; memset(fic, 0, 15);
     int n=0;
 
-  if((     read(pipek[g][1], buffer, 1))!=0){   
+  if((     read(pipek[g][0], buffer, 1))!=0){   
             //NIVEL
              
                 
-                read(pipek[g][0], buffer, 1);
+                
                 
                 nivel = buffer[0];
                 
@@ -344,7 +348,7 @@ void parseI(int g,  char* distrito){
     char fic[15]; memset(fic, 0, 15);
     int n=0;
 
-  if((     read(pipek[g][1], buffer, 1))!=0){   
+  if((     read(pipek[g][0], buffer, 1))!=0){   
             //NIVEL
        
                 
@@ -410,7 +414,7 @@ void parseI(int g,  char* distrito){
     nome[1]=strdup(conc);
     nome[2]=strdup(freg);
      read(pipek[g][1], buffer, 1);
-     printf("%c++++\n",buffer[0]);
+   
    
 
    
@@ -450,7 +454,7 @@ void naoExiste( int li, char* distrito){
         
             while(1){
                 if((read(pipek[n-1][0],buffer,2))!=0){
-                    printf("--%c--\n",buffer[0]); 
+                   
                     if (buffer[0]=='a') {
                         
                         
